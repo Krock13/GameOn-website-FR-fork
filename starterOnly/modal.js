@@ -18,41 +18,42 @@ const checkBox = document.querySelectorAll('.checkbox-input[type=checkBox]');
 const closeModalBtn = document.querySelectorAll('.close');
 const submitBtn = document.getElementById('btn-submit');
 
+// Regex
 const nameRegex = /^[a-zA-Zéèàùç'-]{2,}(\s[a-zA-Zéèàùç'-]{2,})?$/;
 const emailRegex = /^\S+@\S+\.\S+$/;
 // const birthdateRegex =
 // 	/(^(((0[1-9]|1[0-9]|2[0-8])[\/](0[1-9]|1[012]))|((29|30|31)[\/](0[13578]|1[02]))|((29|30)[\/](0[4,6,9]|11)))[\/](19|[2-9][0-9])\d\d$)|(^29[\/]02[\/](19|[2-9][0-9])(00|04|08|12|16|20|24|28|32|36|40|44|48|52|56|60|64|68|72|76|80|84|88|92|96)$)/gm;
 const quantityRegex = /^(0?[1-9]|[1-9][0-9])$/;
 
-// launch modal event
+// Launch modal event
 modalBtn.forEach((btn) => btn.addEventListener('click', launchModal));
 
-// launch modal form
+// Launch modal form
 function launchModal() {
 	modalbg.style.display = 'block';
 }
 
-// close modal event
+// Close modal event
 closeModalBtn.forEach((btn) => btn.addEventListener('click', closeModal));
 
-// close modal form
+// Close modal form
 function closeModal() {
 	modalbg.style.display = 'none';
 }
 
-// add attribute on formData div to show error
+// Add attribute on formData div to show error
 function addError(input, message) {
 	input.parentNode.setAttribute('data-error-visible', true);
 	input.parentNode.setAttribute('data-error', message);
 }
 
-// remove Attribute if there is no error
+// Remove Attribute if there is no error
 function removeError(input) {
 	input.parentNode.removeAttribute('data-error-visible');
 	input.parentNode.removeAttribute('data-error');
 }
 
-// function for test form input
+// Function to test form input
 function validateInput(input, regex, message) {
 	// Add error message if input is empty
 	if (input.value.length === 0) {
@@ -60,10 +61,10 @@ function validateInput(input, regex, message) {
 	}
 
 	input.addEventListener('change', () => {
-		// return false if conditions is not respected
+		// Return false if conditions is not respected
 		let regexpTest = regex.test(input.value);
 
-		// create or remove error message
+		// Create or remove error message
 		if (regexpTest === false) {
 			addError(input, message);
 		} else {
@@ -72,16 +73,19 @@ function validateInput(input, regex, message) {
 	});
 }
 
+// Function to test the birthdate
 function validateBirthdate(input, message) {
 	// Add error message if input is empty
 	if (input.value.length === 0) {
 		addError(input, message);
 	}
+	// Remove the error message on change
 	input.addEventListener('change', () => {
 		removeError(input);
 	});
 }
 
+// Function to test radio buttons
 function validateOption(input, message) {
 	// stock every checked value of radio array
 	let option = [];
@@ -91,38 +95,33 @@ function validateOption(input, message) {
 	// check if option didn't include a true value
 	if (!option.includes(true)) {
 		addError(input[0], message);
-	} else {
-		removeError(input[0]);
 	}
 	// Remove error message on change
 	input.forEach((elem) => {
-		elem.addEventListener('change', (e) => {
-			let item = e.target.value;
-			console.log(item);
+		elem.addEventListener('change', () => {
 			removeError(input[0]);
 		});
 	});
 }
 
+// Function to check if the condition of use checkbox is checked.
 function validateCheckbox(input, message) {
 	// if checkbox is false, create an error message
 	if (!input.checked) {
 		addError(input, message);
-	} else {
-		removeError(input);
 	}
 	// Remove error message on change
-	input.addEventListener('change', (e) => {
-		let item = e.target.value;
+	input.addEventListener('change', () => {
 		removeError(input);
 	});
 }
 
-//show confirmation message function
+//Function to show confirmation message
 function validationMessage() {
 	launchModal();
 	form.style.display = 'none';
 
+	// Create a div with the confirmation message
 	let confirmationMessageBloc = document.createElement('div');
 	confirmationMessageBloc.classList.add('confimationMessageBloc');
 	confirmationMessageBloc.innerHTML = `
@@ -132,18 +131,24 @@ function validationMessage() {
 	  </button>
 	`;
 
+	// Append the div to modal-body
 	document.querySelector('.modal-body').append(confirmationMessageBloc);
+	// Close the modal and refresh page
 	var closeBtnConfirmation = () => {
 		modalbg.style.display = 'none';
 		window.location.href = './index.html';
 	};
 
+	// Event listeners for closing buttons
 	document.querySelector('.close-confirmation-btn').addEventListener('click', closeBtnConfirmation);
 	document.querySelector('.close').addEventListener('click', closeBtnConfirmation);
 }
 
+// Event listener for form submission
 submitBtn.addEventListener('click', (e) => {
-	// formData corresponds suivant son index à : [0]:firstName, [1]:lastName, [2]:email, [3]:birthdate, [4]:quantity
+	e.preventDefault();
+
+	// formData matches according to its index to : [0]:firstName, [1]:lastName, [2]:email, [3]:birthdate, [4]:quantity
 	validateInput(formData[0], nameRegex, 'Veuillez entrer 2 caractères ou plus pour le champ du prénom.');
 	validateInput(formData[1], nameRegex, 'Veuillez entrer 2 caractères ou plus pour le champ du nom.');
 	validateInput(formData[2], emailRegex, 'Veuillez entrer un email valide.');
@@ -152,12 +157,10 @@ submitBtn.addEventListener('click', (e) => {
 	validateOption(radio, 'Vous devez choisir une option.');
 	validateCheckbox(checkBox[0], 'Vous devez vérifier que vous acceptez les termes et conditions.');
 
-	e.preventDefault();
-
+	// Get all the errors
 	let errors = document.querySelectorAll('.formData[data-error]');
-	// console.log(errors);
 
-	// if form has no error, display validate message else keep form on screen
+	// If form has no error, display validate message else keep form on screen
 	if (errors.length === 0) {
 		console.log('Prénom : ', formData[0].value);
 		console.log('Nom : ', formData[1].value);

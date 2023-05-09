@@ -545,6 +545,7 @@ footer {
 	}
 }
 
+/* Confirmation message in modal */
 .confimationMessageBloc {
 	display: flex;
 	flex-direction: column;
