@@ -118,6 +118,30 @@ function validateCheckbox(input, message) {
 	});
 }
 
+//show confirmation message function
+function validationMessage() {
+	launchModal();
+	form.style.display = 'none';
+
+	let confirmationMessageBloc = document.createElement('div');
+	confirmationMessageBloc.classList.add('confimationMessageBloc');
+	confirmationMessageBloc.innerHTML = `
+	  <p> Merci pour<br>votre inscription </p>
+	  <button class="btn-signup modal-btn close-confirmation-btn">
+		Fermer
+	  </button>
+	`;
+
+	document.querySelector('.modal-body').append(confirmationMessageBloc);
+	var closeBtnConfirmation = () => {
+		modalbg.style.display = 'none';
+		window.location.href = './index.html';
+	};
+
+	document.querySelector('.close-confirmation-btn').addEventListener('click', closeBtnConfirmation);
+	document.querySelector('.close').addEventListener('click', closeBtnConfirmation);
+}
+
 submitBtn.addEventListener('click', (e) => {
 	// formData corresponds suivant son index à : [0]:firstName, [1]:lastName, [2]:email, [3]:birthdate, [4]:quantity
 	validateInput(formData[0], nameRegex, 'Veuillez entrer 2 caractères ou plus pour le champ du prénom.');
@@ -148,11 +172,6 @@ submitBtn.addEventListener('click', (e) => {
 		console.log('Termes et conditions : ', checkBox[0].checked);
 		console.log('Event : ', checkBox[1].checked);
 
-		form.reset();
-		form.style.display = 'none';
-		let validateEl = document.createElement('p');
-		validateEl.classList.add('modal-validate');
-		validateEl.textContent = 'Merci ! Votre réservation a été reçue.';
-		modalBody.appendChild(validateEl);
+		validationMessage();
 	}
 });
