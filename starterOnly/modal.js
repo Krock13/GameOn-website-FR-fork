@@ -1,3 +1,4 @@
+// Edit the header for the responsive version
 function editNav() {
 	var x = document.getElementById('myTopnav');
 	if (x.className === 'topnav') {
@@ -8,7 +9,7 @@ function editNav() {
 }
 
 // DOM Elements
-let form = document.querySelector('form');
+const form = document.querySelector('form');
 const modalbg = document.querySelector('.bground');
 const modalBody = document.querySelector('.modal-body');
 const modalBtn = document.querySelectorAll('.modal-btn');
@@ -134,7 +135,7 @@ function validationMessage() {
 	// Append the div to modal-body
 	document.querySelector('.modal-body').append(confirmationMessageBloc);
 	// Close the modal and refresh page
-	var closeBtnConfirmation = () => {
+	const closeBtnConfirmation = () => {
 		modalbg.style.display = 'none';
 		window.location.href = './index.html';
 	};
