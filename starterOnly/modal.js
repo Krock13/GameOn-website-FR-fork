@@ -55,22 +55,18 @@ function removeError(input) {
 }
 
 // Function to test form input
-function validateInput(input, regex, message) {
-	// Add error message if input is empty
-	if (input.value.length === 0) {
+function regexValidation(input, regex, message) {
+	// Return false if conditions is not respected
+	let regexpTest = regex.test(input.value);
+
+	// Create or remove error message
+	if (regexpTest === false) {
 		addError(input, message);
+	} else {
+		removeError(input);
 	}
-
 	input.addEventListener('change', () => {
-		// Return false if conditions is not respected
-		let regexpTest = regex.test(input.value);
-
-		// Create or remove error message
-		if (regexpTest === false) {
-			addError(input, message);
-		} else {
-			removeError(input);
-		}
+		regexValidation(input, regex, message);
 	});
 }
 
@@ -150,11 +146,11 @@ submitBtn.addEventListener('click', (e) => {
 	e.preventDefault();
 
 	// formData matches according to its index to : [0]:firstName, [1]:lastName, [2]:email, [3]:birthdate, [4]:quantity
-	validateInput(formData[0], nameRegex, 'Veuillez entrer 2 caractères ou plus pour le champ du prénom.');
-	validateInput(formData[1], nameRegex, 'Veuillez entrer 2 caractères ou plus pour le champ du nom.');
-	validateInput(formData[2], emailRegex, 'Veuillez entrer un email valide.');
+	regexValidation(formData[0], nameRegex, 'Veuillez entrer 2 caractères ou plus pour le champ du prénom.');
+	regexValidation(formData[1], nameRegex, 'Veuillez entrer 2 caractères ou plus pour le champ du nom.');
+	regexValidation(formData[2], emailRegex, 'Veuillez entrer un email valide.');
 	validateBirthdate(formData[3], 'Vous devez entrer votre date de naissance.');
-	validateInput(formData[4], quantityRegex, 'Veuillez entrer un nombre en 1 et 99');
+	regexValidation(formData[4], quantityRegex, 'Veuillez entrer un nombre en 1 et 99');
 	validateOption(radio, 'Vous devez choisir une option.');
 	validateCheckbox(checkBox[0], 'Vous devez vérifier que vous acceptez les termes et conditions.');
 
