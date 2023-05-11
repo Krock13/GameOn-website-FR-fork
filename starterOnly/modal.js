@@ -62,12 +62,15 @@ function regexValidation(input, regex, message) {
 	// Create or remove error message
 	if (regexpTest === false) {
 		addError(input, message);
+		input.addEventListener('change', () => {
+			regexValidation(input, regex, message);
+		});
 	} else {
 		removeError(input);
+		input.removeEventListener('change', () => {
+			regexValidation(input, regex, message);
+		});
 	}
-	input.addEventListener('change', () => {
-		regexValidation(input, regex, message);
-	});
 }
 
 // Function to test the birthdate
